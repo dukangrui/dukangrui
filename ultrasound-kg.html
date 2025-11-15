@@ -1,83 +1,198 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>超声成像知识图谱（思维导图）· 杜康瑞</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>超声成像知识图谱（思维导图） · 杜康瑞</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 页面样式，可以按需改 -->
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: "Microsoft YaHei", sans-serif;
-      background: linear-gradient(135deg, #e0f2fe, #dcfce7);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC",
+        "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #e8f3ff 0%, #e2f9f0 40%, #ffffff 100%);
+      color: #123;
     }
-    #mindmap {
+
+    header {
+      padding: 16px 32px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    #mindmap-wrapper {
+      height: calc(100vh - 80px);
+      padding: 0 16px 16px;
+    }
+
+    #mindmap-wrapper-inner {
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 18px 45px rgba(15, 77, 173, 0.18);
+      height: 100%;
+      padding: 12px;
+      overflow: hidden;
+    }
+
+    /* 让 SVG 占满容器 */
+    svg.markmap {
       width: 100%;
-      height: 100vh;
+      height: 100%;
+    }
+
+    /* 只是为了让加载过程中不看到 markdown 文本 */
+    pre.markmap {
+      margin: 0;
     }
   </style>
 
-  <!-- 引入 Markmap 必须的脚本 -->
+  <!-- 必须的脚本：d3 + markmap-view + markmap-autoloader -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-view"></script>
   <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader"></script>
 </head>
 
 <body>
-  <!-- 思维导图容器（markdown）-->
-  <div id="mindmap">
-    <script type="text/markdown">
-# 超声成像（Ultrasound Imaging）
+  <header>
+    <h1>超声成像知识图谱（思维导图）</h1>
+    <p>点击节点可展开 / 收起；可拖动画面、滚轮缩放，自由浏览知识结构。</p>
+  </header>
+
+  <div id="mindmap-wrapper">
+    <div id="mindmap-wrapper-inner">
+      <!-- markmap 会自动把这个 <pre> 渲染成思维导图 -->
+      <pre class="markmap">
+# 超声成像 Ultrasound Imaging
 
 ## 物理基础
-- 声束传播与衰减
+### 声束与介质
+- 声速
 - 声阻抗与界面反射
-- 折射、散射与漫反射
-- 回声形成机制
+- 衰减、散射与漫反射
+
+### 超声波特性
+- 频率与波长
+- 声束宽度与焦点
+- 近场 / 远场
+
+### 能量与安全
+- 声强与声压
+- 热效应
+- 机械效应
+- 安全参数（MI, TI）
 
 ## 探头与成像模式
 ### 探头类型
 - 线阵探头
-- 凸阵探头
 - 相控阵探头
-- 腔内探头 / 高频探头
+- 曲阵探头
+- 高频小探头
 
 ### 成像模式
-- B 模（灰阶超声）
-- M 模
-- 彩色多普勒（CDFI）
-- 频谱多普勒（PW / CW）
-- 能量多普勒 / 组织多普勒
+- A 型（A-mode）
+- B 型（B-mode）
+- M 型（M-mode）
+- 多普勒成像
+  - PW / CW
+  - 彩色多普勒（CDFI）
+  - 能量多普勒（PDI）
 
-## 图像特征与伪影
-### 图像特征
-- 回声强度：低 / 等 / 高回声
-- 实性、囊性、混合性结构
-- 边界与内部均匀性
+## 图像形成与优化
+### 扫描与接收
+- 发送脉冲
+- 回声接收
+- 聚焦与延时求和
+- 动态聚焦
 
-### 伪影
-- 声影（衰减 / 吸收）
-- 声增强
-- 混响伪影
-- 镜面伪影
-- 旁瓣伪影 / 折射伪影
+### 图像处理
+- 时间增益补偿（TGC）
+- 动态范围
+- 灰阶映射
+- 伪彩色显示
 
-## 典型临床应用
-- 腹部：肝胆胰脾、泌尿系统
-- 心脏：结构与功能评估
-- 血管：动脉、静脉、血栓
-- 妇产科：孕周评估、胎儿结构
-- 浅表器官：甲状腺、乳腺、淋巴结
+### 画质优化
+- 深度、焦点设置
+- 频率选择
+- 帧频与空间分辨率
+- 伪影识别与抑制
 
-## 优势与局限
-### 优势
-- 无电离辐射
-- 实时动态成像
-- 可床旁操作
-- 设备便携、成本低
+## 高级成像技术
+### 谐波成像
+- 组织谐波成像（THI）
+- 对比增强谐波（CEUS）
 
-### 局限
-- 操作者依赖性强
-- 骨与气体遮挡
-- 深部结构受限
-    </script>
+### 造影与血流
+- 超声造影剂
+- 微泡动力学
+- 灌注评估
+
+### 组织定量
+- 超声弹性成像
+  - 变形法
+  - Shear-wave
+- 定量血流成像
+
+## 临床应用
+### 腹部超声
+- 肝胆胰脾
+- 肾脏与泌尿系统
+- 血管评估
+
+### 心脏超声
+- 心腔与瓣膜
+- 心功能评价
+- 先心病
+
+### 产科与妇科
+- 胎儿系统筛查
+- 妇科肿瘤评估
+
+### 其他系统
+- 颈部与甲状腺
+- 乳腺与浅表器官
+- 肌骨超声
+
+## 质量控制与安全
+### 设备与校准
+- 性能测试
+- 幻影与标准测试
+- 探头维护
+
+### 操作者
+- 扫查规范
+- 报告规范
+- 持续教育（CME）
+
+### 病人安全
+- 适应证与禁忌证
+- 暴露时间控制
+- 信息沟通与告知
+      </pre>
+    </div>
   </div>
+
+  <!-- autoloader 会自动执行，无需再写 JS；如果想手动触发，可以保留这行 -->
+  <script>
+    // 确保在脚本加载完后执行一次
+    if (window.markmap && window.markmap.autoLoader) {
+      window.markmap.autoLoader.renderAll();
+    }
+  </script>
 </body>
 </html>
