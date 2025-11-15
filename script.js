@@ -1,7 +1,7 @@
 // 打字机效果
 const typewriterElement = document.getElementById("typewriter");
 const text =
-    "你好，我是杜康瑞 —— 天津医科大学医学影像学专业，关注影像诊断与 ADPKD 机制研究。";
+    "你好，我是杜康瑞";
 let index = 0;
 
 function typeWriter() {
