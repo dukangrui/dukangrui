@@ -5,7 +5,6 @@
   <title>超声成像知识图谱（思维导图） · 杜康瑞</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- 页面样式，可以按需改 -->
   <style>
     * {
       box-sizing: border-box;
@@ -50,34 +49,31 @@
       overflow: hidden;
     }
 
-    /* 让 SVG 占满容器 */
-    svg.markmap {
+    svg#mindmap {
       width: 100%;
       height: 100%;
     }
-
-    /* 只是为了让加载过程中不看到 markdown 文本 */
-    pre.markmap {
-      margin: 0;
-    }
   </style>
 
-  <!-- 必须的脚本：d3 + markmap-view + markmap-autoloader -->
+  <!-- d3 + markmap（手动版本） -->
   <script src="https://cdn.jsdelivr.net/npm/d3@6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/markmap-view"></script>
-  <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.6.7/dist/browser/view.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.6.7/dist/browser/index.min.js"></script>
 </head>
 
 <body>
   <header>
     <h1>超声成像知识图谱（思维导图）</h1>
-    <p>点击节点可展开 / 收起；可拖动画面、滚轮缩放，自由浏览知识结构。</p>
+    <p>点击节点可展开 / 收起；拖动画面，滚轮缩放，自由浏览知识结构。</p>
   </header>
 
   <div id="mindmap-wrapper">
     <div id="mindmap-wrapper-inner">
-      <!-- markmap 会自动把这个 <pre> 渲染成思维导图 -->
-      <pre class="markmap">
+      <!-- 思维导图画布 -->
+      <svg id="mindmap"></svg>
+
+      <!-- 用 textarea 存放 markdown 文本（隐藏） -->
+      <textarea id="mindmap-md" style="display:none;">
 # 超声成像 Ultrasound Imaging
 
 ## 物理基础
@@ -183,16 +179,27 @@
 - 适应证与禁忌证
 - 暴露时间控制
 - 信息沟通与告知
-      </pre>
+      </textarea>
     </div>
   </div>
 
-  <!-- autoloader 会自动执行，无需再写 JS；如果想手动触发，可以保留这行 -->
   <script>
-    // 确保在脚本加载完后执行一次
-    if (window.markmap && window.markmap.autoLoader) {
-      window.markmap.autoLoader.renderAll();
-    }
+    // 读取 markdown 文本
+    const md = document.getElementById('mindmap-md').value;
+
+    const { Transformer } = window.markmapLib;
+    const { Markmap, loadCSS, loadJS } = window.markmap;
+
+    const transformer = new Transformer();
+    const { root, features } = transformer.transform(md);
+    const { styles, scripts } = transformer.getAssets(features);
+
+    // 加载 markmap 所需的额外资源（如语法高亮等）
+    if (styles) loadCSS(styles);
+    if (scripts) loadJS(scripts, { getMarkmap: () => window.markmap });
+
+    // 创建思维导图
+    Markmap.create('#mindmap', {}, root);
   </script>
 </body>
 </html>
